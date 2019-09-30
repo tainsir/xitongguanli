@@ -1,0 +1,141 @@
+{% extends 'base.html' %} {% block title %} {% endblock %} 
+
+
+
+{% block checkpower %}
+<a type="button" onClick="javascript :history.back(-1)"class="btn btn-default" >返回</a>
+<input type="button" value="保存" class="btn btn-default" onclick="document.getElementById('myfrom').submit();">
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header" style="background-color: #ffffe3;">
+				<h3 class="box-title">新建角色</h3>
+				<!-- <a href="{% url 'user:add_user' %}">添加新用户</a> -->
+				<div class="box-tools">
+					<div class="input-group input-group-sm" style="width: 150px;">
+
+					</div>
+				</div>
+			</div>
+
+			<form method="POST" id = "myfrom" action="/user/new_role/">
+				{% csrf_token %}
+				<div style="text-align: center;">
+					<input type="text" name="username" placeholder="角色名称" />
+				</div>
+				<div style="text-align: center;">
+					是否被选用：
+					<label class="radio-inline">
+          <input type="radio"  name="is_select" value="1"/>  是
+          </label>
+					<label class="radio-inline"> 
+            <input type="radio" name="is_select" value="0"/>否
+        </label>
+				</div>
+                  <hr/>
+                  <div class="box-header" style="background-color: #ffffe3;">
+                    <h3 class="box-title">赋予权限</h3>
+                  </div>
+                  
+       <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header" style="background-color: #ffffe3;">
+              <h3 class="box-title">用户</h3>
+              <!-- <a href="{% url 'user:add_user' %}">添加新用户</a> -->
+              <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                  <input type="text" name="table_search" class="form-control pull-right" placeholder="搜索">
+
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th><input type="checkbox" id = "fetchall" /></th>
+                 
+                  <th>菜单</th>
+                 
+                  <th>操作</th>
+                  
+                  
+                </tr>
+                
+                       {% for data in operation_data %}
+      
+		<tr>
+               <td><input type="checkbox" name="operation_id" value="{{data.id}}" /></td>
+                <td>{{data.menu}}</td>
+                <td>{{data.title}}</td>
+            
+		</tr>
+  
+          {% endfor %}
+                
+                </table>
+      		 </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+                  
+                  
+                  
+                  
+                  
+
+                  
+                  
+                  
+				<!--<div style = "margin:0 auto; width:200px;  ">
+			
+				{% for data in operation_data %}
+		       
+        <div style = "text-align: center;">
+	<div class="form-control">
+		
+               <input type="checkbox" name="operation_id" value="{{data.id}}" />
+                &nbsp{{data.title}} &nbsp  &nbsp{{data.menu}}
+            
+         </div>  
+</div>
+				{% endfor %}
+				
+				
+				</div>-->
+				
+				<h1>{{error}}</h1>
+			</form>
+		</div>
+		<!-- /.box-body -->
+	</div>
+	<!-- /.box -->
+</div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+	$("#fetchall").click(function(){
+		console.log("1111")
+		
+		if(this.checked){
+			console.log("aa")
+			$("[name=operation_id]:checkbox").remove('checked',false)
+			$("[name=operation_id]:checkbox").prop('checked',true)
+		}else{
+			$("[name=operation_id]:checkbox").remove('checked',true)
+			$("[name=operation_id]:checkbox").prop('checked',false)
+		}
+	})
+	</script>
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<style type="text/css">
+th {
+   text-align: center;
+}
+td{
+	text-align: center;
+}
+</style>
+{% endblock %}
+{% block title %}
+
+
+     
+
+{% endblock %}
+
+{% block content %}
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+				<h4 class="modal-title" id="myModalLabel">
+               		角色查看
+                </h4>
+                <div  id = "sb1">
+                	
+                </div>
+			</div>
+			<div class="modal-body">
+				<form id="myform" action="" enctype="multipart/form-data" method="post">{% csrf_token %}
+					<input type="hidden" readonly="true " name="killid" id="killid">
+					<div id = "shujuzhanshi">
+						
+					</div>
+				
+
+				</form>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal -->
+</div>
+
+    <div class="row">
+    	
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header" style="background-color: #ffffe3;">
+              <h3 class="box-title">用户</h3>
+            
+              <!--<div class="box-tools">
+              	<form action="/user/search/" method="post">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                  <input type="text" name="table_user" class="form-control pull-right" placeholder="搜索">
+
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+                  </form>
+                </div>
+                </form>
+              </div>-->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th>用户名</th>
+                 
+                  <th>组织机构</th>
+                 
+                  <th>创建时间</th>
+                  <th>状态</th>
+                  <th colspan="2">操作</th>
+                </tr>
+                {% for user in alluser %}
+                <tr>
+            	
+                  <td>{{user.username}}</td>
+           
+             
+                  <td>待定</td>
+                  
+                  <td>{{user.created_at}}</td>
+                  {% if user.is_active == 1 %}
+                  	<td>激活</td>
+                  {% else %}
+                 	 <td>未激活</td>
+                  {% endif %}
+                  <td><a href="/user/{{user.id}}/edit_user/" ><span class="glyphicon glyphicon-file" style = "color: black;" aria-hidden="true"></span></a>
+                  <a href="/user/{{user.id}}/delete/" ><span class="glyphicon glyphicon-trash"style = "color: black;"></span></a>
+                  <a href="#" data-toggle="modal" onclick="prom('{{user.id}}','{{user.username}}')"><span class="glyphicon glyphicon-zoom-in" style = "color: black;" ></span></a>
+                  </td>
+                </tr>
+                {% endfor %}
+
+              </table>
+
+              <div class="box-footer clearf ix" style ="float:left;">
+	              <ul class="pagination pagination-sm no-margin pull-right">
+                    {% if alluser.has_previous %}
+                    <li>
+                      <a href="?page={{ alluser.previous_page_number }}&action={{action}}&id={{id}}" aria-label="Previous">
+                        <span aria-label="true">上一页</span>
+                      </a>
+                    </li>
+                  {% endif %}
+
+                  {% for pg in alluser.paginator.page_range %}
+                    {% if alluser.number == pg %}
+                      <li class="active"><a href="?page={{pg}}&action={{action}}&id={{id}}">{{pg}}</a></li>
+                    {% else %}
+                      <li><a href="?page={{pg}}">{{pg}}</a></li>
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if alluser.has_next %}
+                    <li>
+                      <a href="?page={{ alluser.next_page_number }}&action={{action}}&id={{id}}" aria-label="Next">
+                        <span aria-hidden="true">下一页</span>
+                      </a>
+                    </li>
+                  {% endif %}
+	              </ul>
+              </div>
+
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+       
+      </div>
+      
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+	function prom(id , name) {
+		
+		$('#myModal').modal('show');
+	
+		$('#myModal').on('hide.bs.modal', function() {
+			$('#myform')[0].reset();
+			$(this).find("shujuzhanshi").remove();
+		});
+		
+		$.ajax({
+				url: "http://localhost:8000/user/show_role/?user_id=" + id + "",
+				//			type:'json',
+				success: function(data) {
+					parsedata(data  ,name)
+					
+				}
+			}
+
+		)
+
+	}
+
+	function parsedata(data ,name) {
+		console.log(name)
+//		
+		$("ul").remove(".list-group")
+		$("p").remove("#sb")
+
+		var zhanshi = ''+name+',对不起您没有任何角色'
+		if (data['data'] ==''){
+	var ele = '<ul class="list-group"><li class="list-group-item">'+zhanshi+'</li></ul>'
+			$("#shujuzhanshi").append($(ele))
+		}
+		else
+		{
+		for(var i = 0; i < data['data'].length; i++) {
+			zhanshi = data['data'][i]['role_name']
+			console.log(zhanshi)
+			var ele = '<ul class="list-group"><li class="list-group-item">'+zhanshi+'</li></ul>'
+			$("#shujuzhanshi").append($(ele))
+	
+		}
+				var ele = '<p id = "sb">'+name+'</p><p id = "sb" >你的角色是：</p>'
+		$("#sb1").append($(ele))
+		}
+//		console.log(name)
+
+
+	}
+</script>
+{% endblock %}

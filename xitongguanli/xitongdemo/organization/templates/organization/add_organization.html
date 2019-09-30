@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block checkpower %}
+ <button  onClick="javascript :history.back(-1)" class="btn btn-left">返回</button>
+                 
+<button type="button"  class="btn btn-default" onclick="document.getElementById('myfrom').submit();">保存</button>
+
+{% endblock %}
+{% block content %}
+  <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header" style="background-color: #ffffe3;">
+              <h3 class="box-title">添加组织机构</h3>
+     
+            </div>
+    <form method="POST"  id = "myfrom"  action="/organization/add_organization?oid={{data.id}}">
+        {% csrf_token %}
+         <p>
+            <input type="text" name="name" placeholder="名称" />
+        </p>
+        <p>
+            上级目录：{{data.name}}
+
+        </p>
+        <p>级别：
+            总公司<input type="radio"  name="type" value="1"/>
+            分公司<input type="radio" name="type" value="2"/>
+            部门<input type="radio" name="type" value="3"/>
+            职务<input type="radio" name="type" value="4"/>
+        </p>
+        <p>
+            <input type="text" name="number" placeholder="代码编号" />
+        </p>
+
+        <input type="submit" value="提交" />
+        <a href="{% url 'organization:dept_show' %}">取消</a>
+        <h1>{{error}}</h1>
+    </form>
+    
+    
+    </div>
+   </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table table-bordered">
+    <tr>
+        <th>姓名</th><th>职务</th><th>类型</th>
+    </tr>
+    {% for people in peoples %}
+    <tr>
+        <th>{{ people.nickname }}</th>
+        <th>{{ people.job }}</th>
+        <th>{{ people.get_job_type_display }}</th>
+    </tr>
+        {% empty %}
+        <tr><th colspan="3">没有人员</th> </tr>
+    {% endfor %}
+</table>
+{% endblock%}

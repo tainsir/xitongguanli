@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block checkpower %}
+ <button  onClick="javascript :history.back(-1)" class="btn btn-left">返回</button>
+                 
+<button type="button"  class="btn btn-default" onclick="document.getElementById('myfrom').submit();">保存</button>
+
+{% endblock %}
+{% block content %}
+  <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header" style="background-color: #ffffe3;">
+              <h3 class="box-title">添加组织机构</h3>
+     
+            </div>
+    <form method="POST"  id = "myfrom" action="/organization/edit_organization?oid={{data.id}}">
+        {% csrf_token %}
+         <p>
+            <input type="text" name="name" placeholder="{{data.name}}" />
+        </p>
+        <p>
+            {% if number.type == 1 %}
+                目前级别：总公司
+            {% elif number.type == 2 %}
+                目前级别：分公司
+            {% elif number.type == 3 %}
+                目前级别：部门
+            {% else  %}
+                目前级别：职务
+            {% endif %}
+        </p>
+        <p>
+            <input type="text" name="number" placeholder="{{ data.number }}" />
+        </p>
+
+        <input type="submit" value="提交" />
+        <a href="{% url 'organization:dept_show' %}">取消</a>
+        
+        <h1>{{error}}</h1>
+    </form>
+</div>
+</div>
+   {% endblock %}

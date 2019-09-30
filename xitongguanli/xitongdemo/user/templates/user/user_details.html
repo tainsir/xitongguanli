@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    用户详细信息
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header" style="background-color: #ffffe3;">
+              <h3 class="box-title">用户信息</h3>
+            </div>
+            <!-- /.box-header -->
+            <div>
+                <div class="box box-info">
+
+                <!-- /.box-header -->
+                <!-- form start -->
+                  <div class="box" style="box-body table-responsive no-padding">
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                      <table class="table table-condensed">
+                        <tr>
+                          <td>用户名</td>
+                          <td>
+                            <span>{{user.username}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>创建时间</td>
+                          <td>
+                            <span>{{user.created_at}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>更新时间</td>
+                          <td>
+                            <span>{{user.updated_at}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>组织信息</td>
+                          <td>
+                            {% if user.organization.type == 1 %}
+                              <span>{{user.organization.name}}</span>
+                            {% elif user.organization.type == 2 %}
+                              <span>{{user.organization.name}}</span>
+                            {% elif user.organization.type == 3 %}
+                              <span>{{organizations}}+{{user.organization.name}}</span>
+                            {% elif user.organization.type == 4 %}
+                              <span>{{or_id}}+{{organizations}}+{{user.organization.name}}</span>
+                            {% endif %}
+                        </tr>
+                      </table>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  <!-- /.box -->
+
+                  <div class="box-header" style="background-color: #ffffe3;">
+                    <h3 class="box-title">角色信息</h3>
+                  </div>
+
+
+                  <div class="row">
+                    {% for role in role_list %}
+                    <div class="col-xs-6 col-md-4">{{role.name}}</div>
+                    {% endfor %}
+                  </div>
+
+
+                  <!-- /.box-body -->
+                  <div class="box-footer">
+
+                    <button type="submit" class="btn btn-default"><a href="/user/{{user.id}}/edit_user/" style="color:#333333">编辑</a></button>
+                    <button type="submit" class="btn btn-info pull-right"><a href="/user/{{user.id}}/delete/" style="color:#333333">删除</a></button>
+
+                  </div>
+
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+{% endblock %}

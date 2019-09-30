@@ -1,0 +1,198 @@
+{% extends 'base.html' %} {% block title %} 
+ 
+      
+
+          	
+{% endblock %}
+      
+ {% block content %}
+     
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+				<h4 class="modal-title" id="myModalLabel">
+               		 权限查看
+                </h4>
+                <div id = "sb1"></div>
+			</div>
+			<div class="modal-body">
+				<form id="myform" action="" enctype="multipart/form-data" method="post">
+					<input type="hidden" readonly="true " name="killid" id="killid">
+					<div id = "shujuzhanshi">
+						
+					</div>
+				
+
+				</form>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal -->
+</div>
+ <div class="row">
+ 
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header" style="background-color: #ffffe3;">
+              <h3 class="box-title">角色</h3>
+             
+              <div class="box-tools">
+              	<form action="/user/search/" method="post">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                  <input type="text" name="table_role" class="form-control pull-right" placeholder="搜索">
+
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+                  
+                </div>
+                </form>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+		<table class="table table-hover">
+			<tr>
+				<th>角色编码</th>
+				<th>角色名称</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+			{% for role in all_role %}
+			<tr>
+
+				<td>{{ role.id }}</td>
+				<td> {{role.name}}</td>
+				{% if role.is_select == 1 %}
+				<td>启用</td>
+				{% else %}
+				<td>停用</td>
+				{% endif %}
+				<td>
+					<a href="/user/edit_role/{{ role.id }}" ><span class="glyphicon glyphicon-file" style = "color: black;" aria-hidden="true"></span></a>
+					
+					<a href="{% url 'user:del_role' %}?nid={{ role.id }}" ><span class="glyphicon glyphicon-trash"style = "color: black;"></span></a>
+					
+					<a href="#" data-toggle="modal" onclick="prom('{{role.id}}','{{role.name}}')" ><span class="glyphicon glyphicon-zoom-in" style = "color: black;" ></span></a>
+				</td>
+			</tr>
+			{% endfor %}
+
+		</table>
+
+	</div>
+	<div class="box-footer clearfix" style ="float:left">
+		<ul class="pagination pagination-sm no-margin pull-right">
+			{% if all_role.has_previous %}
+			<li>
+				<a href="?page={{ all_role.previous_page_number }}&action={{action}}&id={{id}}" aria-label="Previous">
+					<span aria-label="true">上一页</span>
+				</a>
+			</li>
+			{% endif %} {% for pg in all_role.paginator.page_range %} {% if all_role.number == pg %}
+			<li class="active">
+				<a href="?page={{pg}}">{{pg}}</a>
+			</li>
+			{% else %}
+			<li>
+				<a href="?page={{pg}}">{{pg}}</a>
+			</li>
+			{% endif %} {% endfor %} {% if all_role.has_next %}
+			<li>
+				<a href="?page={{ all_role.next_page_number }}&action={{action}}&id={{id}}" aria-label="Next">
+					<span aria-hidden="true">下一页</span>
+				</a>
+			</li>
+			{% endif %}
+		</ul>
+        </div>
+
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      
+      </div>
+{% endblock %} 
+{% block javascript %}
+<script type="text/javascript">
+	//	$('#myModal').on('hide.bs.modal', function ()
+	//  {
+	//      $('#myform')[0].reset();
+	//      //这个方法来清除缓存
+	//      $(this).find("img").remove();
+	//  });
+	//  //解析数据函数
+	//	$("#model").click(function() {
+	//      $("#myModal").modal("show");  
+	//		var roleid = $(this).parent().prev().html();
+	//		console.log(roleid)
+	////		document.getElementById("goodsid").value=goodsid;
+	////		var goodsname = $(this).parent().prev().prev().prev().prev().html();
+	////		document.getElementById("goodsname").value = goodsname;
+	//	});
+
+	function prom(id , name) {
+		$('#myModal').modal('show');
+
+		$('#myModal').on('hide.bs.modal', function() {
+			//      var radio =$("input[type='radio']:checked").val();    
+			//      alert("您选择的是：" + radio + "。抱歉！添加功能暂时不提供。");  
+			$('#myform')[0].reset();
+			//这个方法来清除缓存
+			$(this).find("shujuzhanshi").remove();
+		});
+		console.log(id)
+		$.ajax({
+				url: "http://localhost:8000/user/show_opeartion/?role_id=" + id + "",
+				//			type:'json',
+				success: function(data) {
+					parsedata(data , name)
+				}
+			}
+
+		)
+
+	}
+
+	function parsedata(data , name) {
+		$("ul").remove(".list-group")
+		$("p").remove("#sb")
+		var zhanshi = '对不起您没有任何权限'
+		if (data['data'] ==''){
+var ele = '<ul class="list-group"><li class="list-group-item">'+zhanshi+'</li></ul>'
+			$("#shujuzhanshi").append($(ele))
+		}
+		else
+		{
+		for(var i = 0; i < data['data'].length; i++) {
+			var shuju = data['data'][i]['title']
+			var menu = data['data'][i]['menu']
+//			var 
+//			if (shuju =="1"){
+//				zhanshi = '新建'
+//			}
+//			if (shuju == '2'){
+//				zhanshi = '更新'
+//			}
+			var ele = '<ul class="list-group"><li class="list-group-item" style = "text-align:center">'+shuju+'                  '+menu+'</li></ul>'
+			$("#shujuzhanshi").append($(ele))
+		}
+		var ele = '<p id = "sb">'+name+'</p><p id = "sb" >你的权限是：</p>'
+		$("#sb1").append($(ele))
+		}
+	}
+</script>
+{% endblock %}

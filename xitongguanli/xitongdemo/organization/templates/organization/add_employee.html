@@ -1,0 +1,11 @@
+{% extends 'base.html'  %}
+
+{% block content %}
+    <form method="POST" action="/organization/add_employee/{{employee.id}}/">
+        {% csrf_token %}
+         <p>
+            <input type="text" name="name" placeholder="名称" />
+        </p>
+
+    </form>
+    {% endblock %}

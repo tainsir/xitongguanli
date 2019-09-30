@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+
+{% block checkpower %}
+ 	
+                    <button  onClick="javascript :history.back(-1)" class="btn btn-left">返回</button>
+                 
+                    <button type="button"  class="btn btn-default" onclick="document.getElementById('myfrom').submit();">保存</button>
+              
+{% endblock %}
+
+{% block content %}
+  
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header" style="background-color: #ffffe3;">
+              <h3 class="box-title">编辑用户</h3>
+              <!--<a href="#">添加新用户</a>-->
+            </div>
+            <!-- /.box-header -->
+            <div>
+                <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">用户信息修改</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" id = "myfrom" method="post" action="/user/{{user.id}}/edit_user/">
+                  {% csrf_token %}
+                  <div class="box-body"style="margin:0 auto; width:800px;  " >
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">用户名</label>
+
+                      <div class="col-sm-4">
+                        <input type="text" name="username" class="form-control" id="username" value="{{user.username}}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label" >密码</label>
+                      <div class="col-sm-4">
+                        <input type="password" name="password" class="form-control" id="password" value="{{user.password}}">
+                      </div>
+                    </div>
+
+                    <div class="form-group" style="">
+                      <label class="col-sm-4 control-label">是否激活:</label>
+                      <div class="col-sm-4">
+                      	
+                      	
+                      	{% if pression == 1  %}
+                      
+                          <p style="">
+                            <input type="radio"  name="is_active" checked="checked" value="1"/>是
+                            <input type="radio" name="is_active"  value="0"/>否
+                          </p>
+                          {% else %}
+                          <p style="">
+                            <input type="radio"  name="is_active" value="1"/>是
+                            <input type="radio" name="is_active" checked="checked" value="0"/>否
+                          </p>
+                          {% endif %}
+                         
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr/>
+                  <div class="box-header" style="background-color: #ffffe3;">
+                    <h3 class="box-title">角色信息修改</h3>
+                  </div>
+                  
+
+                  <div class="row" style="margin:0 auto; width:400px; height:100px; ">
+                    {% for role in role_list %}
+                    <div class="col-xs-5 col-md-5"> <p><input type="checkbox" name="role_id" value="{{role.id}}">
+                      {{role.name}}
+                    </p></div>
+                    {% endfor %}
+                  </div>
+<div class="row" style="margin:0 auto; width:400px; height:100px; ">
+                  <!-- /.box-body -->
+            
+                 </div>
+                  <!-- /.box-footer -->
+                </form>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+{% endblock %}
+

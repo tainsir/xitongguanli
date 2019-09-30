@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>选择角色和机构</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/static/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/static/css/AdminLTE.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/static/plugins/iCheck/square/blue.css">
+    <style>
+        select{
+                font-family: "微软雅黑";
+                background: rgba(0,0,0,0);
+                width: 100%;
+                height: 40px;
+                font-size: 18px;
+                color: <div id="f8f8f8"></div>;
+                margin-top:10px;
+                text-align: center;
+                border: 1px #dedede solid;
+                border-radius: 5px;
+            }
+            option{
+                color: black;
+                background: #A6E1EC;
+                line-height: 10px;
+            }
+            select:focus{
+                border: 2px #ddd solid;
+                box-shadow: 0 0 15px 1px #DDDDDD;
+            }
+            <!--option:hover{-->
+                <!--background: #EBCCD1;-->
+            <!--}-->
+        }
+
+    </style>
+
+</head>
+
+<body class="hold-transition login-page">
+<div class="login-box" style="width:30%">
+    <div class="login-logo">
+        <b>##</b>管理系统
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <p class="login-box-msg">选择角色和组织</p>
+        <form action="/user/choice/" method="post">
+            {% csrf_token %}
+            <div class="modal-content form-group">
+                <div class="modal-body">
+                    <label>请选择角色：</label>
+                    <select id="role_id" name="role_id" style="width:auto, 0px; margin:auto;">
+                        {% for role in role_list %}
+                        <option value="{{role.id}}">---{{role.name}}---</option>
+                        {% endfor %}
+                    </select>
+                    <!--<br><br>
+                    <label >请选择组织：</label>
+                    <select id="organization_id" name="organization_id" style="width:auto, 0px;">
+                        {% for organization in organization_list %}
+                        <option value="{{organization.id}}">---{{organization.name}}---</option>
+                        {% endfor %}
+                    </select>-->
+                </div>
+                <div class="modal-footer">
+                    <a type="button" href="{% url 'user:login' %}"class="btn btn-default" data-dismiss="modal" style="float:left">取消</a>
+                    <button type="submit" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+            <!-- /.col -->
+        </form>
+        <!-- /.social-auth-links -->
+
+        <br/>
+
+    </div>
+    <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery 3 -->
+
+
+</body>
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="/static/plugins/iCheck/icheck.min.js"></script>
+
+<script type="text/javascript">
+  $(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue',
+      increaseArea: '20%' /* optional */
+    });
+  });
+</script>
+</html>

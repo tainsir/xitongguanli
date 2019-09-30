@@ -1,0 +1,203 @@
+{% extends 'base.html' %} {% block css %}
+<link rel="stylesheet" href="../../../static/user/css/starter.css">
+<link href="/static/public/zTreeStyle.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link href="/static/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
+
+
+{% endblock %}
+
+{% block add %}
+
+
+<a type="button"  onclick="prom()"class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color: black;" aria-hidden="true">{{power.title}}</span></a>
+{% endblock %}
+ {% block content %}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+				<h4 class="modal-title" id="myModalLabel">
+               		 添加总公司
+                </h4>
+				<div id="sb1"></div>
+			</div>
+			<div class="modal-body">
+				<form id="myform" action="/organization/add/" enctype="multipart/form-data" method="post">{% csrf_token %}
+					<div style="padding-top:20px">
+						<label for="">公司名称：</label><input type="text" name="name" id="organization_name">
+					</div>
+					<div style="padding-top:20px">
+						<label for="">公司编号：</label><input type="text" name="number" id="organization_number">
+					</div>
+					<div style="padding-top:20px">
+						<input type="hidden" name="type" id="organization_type" value="1">
+					</div>
+
+					<div class="modal-footer">
+
+						<button type="submit" class="btn btn-default" style="float:left">提交</button>
+
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+					</div>
+
+				</form>
+
+			</div>
+
+			<!--<div class="modal-footer">
+
+					<button type="submit" class="btn btn-default"style = "float:left">提交</button>
+
+
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+			</div>-->
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal -->
+</div>
+ <div class="row">
+    	
+        <div class="col-xs-12">
+
+		<div class="box">
+			<div class="box-header" style="background-color: #ffffe3;">
+				<h3 class="box-title">组织管理</h3>
+				<!-- <a href="{% url 'user:add_user' %}">添加新用户</a> -->
+			
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body table-responsive no-padding">
+				<div class="layer">
+   					 <div id="tableMain">
+						 <ul id="dataTree" class="ztree">
+						 </ul>
+					 </div>
+				</div>
+			</div>
+		</div>
+		<!-- /.box-body -->
+	</div>
+	<!-- /.box -->
+</div>
+</div>
+
+
+
+{% endblock %} {% block javascript %}
+<script src="/static/public/jquery.ztree.all.min.js"></script>
+<script src="/static/user/js/starter.js"></script>
+
+
+
+<script type="text/javascript">
+	var zTreeNodes;
+    var setting = {
+        view: {
+            showLine: false,
+            showIcon: false,
+            addDiyDom: addDiyDom
+        },
+        data: {
+            simpleData: {
+                enable: true,
+				idKey: "id",
+				pIdKey: "parent_id",
+            }
+        }
+    };
+    /**
+     * 自定义DOM节点
+     */
+    function addDiyDom(treeId, treeNode) {
+        console.log(treeNode)
+        var spaceWidth = 15;
+        var liObj = $("#" + treeNode.tId);
+        var aObj = $("#" + treeNode.tId + "_a");
+        var switchObj = $("#" + treeNode.tId + "_switch");
+        var icoObj = $("#" + treeNode.tId + "_ico");
+        var spanObj = $("#" + treeNode.tId + "_span");
+        aObj.attr('title', '');
+        aObj.append('<div class="diy swich"></div>');
+        var div = $(liObj).find('div').eq(0);
+        switchObj.remove();
+        spanObj.remove();
+        icoObj.remove();
+        div.append(switchObj);
+        div.append(spanObj);
+        var spaceStr = "<span style='height:1px;display: inline-block;width:" + (spaceWidth * treeNode.level) + "px'></span>";
+        switchObj.before(spaceStr);
+        var editStr = '';
+        editStr += '<div class="diy">' + (treeNode.number == null ? '&nbsp;' : treeNode.number) + '</div>';
+        editStr += '<div class="diy">' + (treeNode.type == null ? '&nbsp;' : treeNode.type ) + '</div>';
+        editStr += '<div class="diy">' + formatHandle(treeNode) + '</div>';
+        aObj.append(editStr);
+    }
+    /**
+     * 查询数据
+     */
+    function query(){$.ajax({
+			url: "http://localhost:8000/organization/all_organiza/",
+		
+			success:function(data){
+				//var all = data['data']
+                console.log(data['data']);
+                data1 = data['data']
+//				data1 = [{"CONTACT_USER":'张三',"CONTACT_PHONE":"18888888888","addFlag":true,"ORG_ID":1,"id":"o1","pId":"null","open":true,"name":"单位1","modFlag":true,"CORP_CAT":"港口-天然液化气,港口-液化石油气","TYPE":"org","delFlag":true}]
+        //初始化列表
+        zTreeNodes = data1;
+        //初始化树
+        $.fn.zTree.init($("#dataTree"), setting, zTreeNodes);
+        //添加表头
+        var li_head = ' <li class="head"><a><div class="diy">组织结构名称</div><div class="diy">组织结构编码</div><div class="diy">组织结构类型</div><div class="diy">操作</div></a></li>';
+        var rows = $("#dataTree").find('li');
+        if (rows.length > 0) {
+            rows.eq(0).before(li_head)
+        } else {
+            $("#dataTree").append(li_head);
+            $("#dataTree").append('<li ><div style="text-align: center;" >无符合条件数据</div></li>')
+        }
+			}
+		}
+	)}
+    /**
+     * 根据权限展示功能按钮
+     * @param treeNode
+    
+     */
+    function formatHandle(treeNode) {
+        console.log(treeNode)
+        var htmlStr = '';
+        htmlStr += '<a  href="/organization/edit_organization?oid=' + treeNode.id + '"><span class = "glyphicon glyphicon-file" ></span></a> ';
+
+        htmlStr += '<a   href="/organization/add_organization?oid=' + treeNode.id + '"><span class = "glyphicon glyphicon-plus" ></span></a>';
+        htmlStr += '<a  href= "/organization/delete_origaniza?oid=' + treeNode.id + '"><span class = "glyphicon glyphicon-trash" ></span></a>';
+        return htmlStr;
+    }
+
+    $(function () {
+        //初始化数据
+        query();
+    })
+
+
+
+	function prom() {
+		$('#myModal').modal('show');
+		$('#myModal').on('hide.bs.modal', function() {
+
+			$('#myform')[0].reset();
+
+		});
+	}
+
+
+</script>
+{% endblock %}

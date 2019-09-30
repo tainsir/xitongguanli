@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block checkpower %}
+ 	
+                    <button  onClick="javascript :history.back(-1)" class="btn btn-left">返回</button>
+                 
+                    <button type="button"  class="btn btn-default" onclick="document.getElementById('myfrom').submit();">保存</button>
+              
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+      
+            <!-- /.box-header -->
+            <div>
+                <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">添加用户</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal"  id = "myfrom" method="post" action="/user/add_user/">
+                  {% csrf_token %}
+                  <div class="box-body" style="margin:0 auto; width:800px;  " >
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-sm-4 control-label">账号</label>
+
+                      <div class="col-sm-4">
+                        <input type="text" name="username" class="form-control" id="inputEmail3" placeholder="账号">
+                        {{error}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-sm-4 control-label">密码</label>
+
+                      <div class="col-sm-4">
+                        <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="密码">
+                        {{msg}}
+                      </div>
+                    </div>
+                  </div>
+
+ 									<hr/>
+                  <div class="box-header" style="background-color: #ffffe3;">
+                    <h3 class="box-title">角色信息添加</h3>
+                  </div>
+                   <div class="row" style="margin:0 auto; width:400px; height:100px; ">
+                  {% for role in role_list %}
+                    <div class="col-xs-5 col-md-5"><p><input type="checkbox" name="role_id" value="{{role.id}}">
+                      {{role.name}}
+                    </p></div>
+                  {% endfor %}
+								</div>
+                  <!-- /.box-body -->
+ <div class="row" style="margin:0 auto; width:400px; height:100px; ">
+                  <!-- /.box-body -->
+                  <div class="col-xs-2 col-md-8" style = "text-align: center;">
+                  	<div style = "float: left;">
+                    <button type="submit" class="btn btn-left">取消</button>
+                    </div>
+                    <div style="float: right;">
+                    <button type="submit" class="btn btn-info ">保存</button>
+                    </div>
+                  </div>
+                 </div>
+                  <!-- /.box-footer -->
+
+                  <!-- /.box-footer -->
+                </form>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+{% endblock %}

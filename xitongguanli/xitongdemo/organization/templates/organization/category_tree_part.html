@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load category_tags %}
+{% if categories %}
+<ul style="display:block">
+    {% for cate in categories %}
+    <li style="display:block">{{ cate.name }}
+        &nbsp&nbsp&nbsp&nbsp<a href="/organization/edit_organization/{{cate.id}}/">详细信息</a>
+        {% if cate.type != 4 %}
+        &nbsp&nbsp&nbsp&nbsp<a href="/organization/add_organization/{{cate.id}}/">添加下级</a>
+        {% else %}
+        {% endif %}
+        {% category_tree cate %}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
+
+

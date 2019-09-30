@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    人员信息修改
+{% endblock %}
+
+{% block content %}
+<dl class="dl-horizontal">
+    <dt>人员名称</dt>
+    <dd>{{ data.name }}</dd>
+    <dt>人员编号</dt>
+    <dd>{{ data.number }}</dd>
+    <dt>人员名称</dt>
+    <dd>{{ data.name }}</dd>
+    <dt>人员编号</dt>
+    <dd>{{ data.number }}</dd>
+    <dt>人员名称</dt>
+    <dd>{{ data.name }}</dd>
+    <dt>人员编号</dt>
+    <dd>{{ data.number }}</dd>
+</dl>
+
+{% endblock %}
+
+<!--<form method="POST" action="/user/edit_employee/{{ eid }}">-->
+        <!--{% csrf_token %}-->
+         <!--<p>-->
+            <!--<input type="text" name="name" placeholder="角色名称" />-->
+        <!--</p>-->
+        <!--<p>-->
+            <!--是否被选用：-->
+            <!--是<input type="radio"  name="is_select" value="0"/>-->
+            <!--否<input type="radio" name="is_select" value="1"/>-->
+        <!--</p>-->
+        <!--<p>-->
+            <!--创建时间<input type="date" name="created_at" placeholder="创建时间" />-->
+            <!--最后更新时间<input type="date" name="updated_at" placeholder="最后更新时间" />-->
+        <!--</p>-->
+          <!--{% for data in operation_data %}-->
+
+            <!--<p><input type="checkbox" name="operation_id" value="{{data.id}}" />-->
+                <!--&nbsp{{data.title}} &nbsp &nbsp {{data.menu}}-->
+            <!--</p>-->
+
+          <!--{% endfor %}-->
+        <!--&lt;!&ndash;<select name="operation_id" multiple="multiple" >&ndash;&gt;-->
+          <!--&lt;!&ndash;{% for data in operation_data %}&ndash;&gt;-->
+           <!--&lt;!&ndash;<option value="{{ data.id}}">{{ data.title }}</option>&ndash;&gt;-->
+          <!--&lt;!&ndash;{% endfor %}&ndash;&gt;-->
+        <!--&lt;!&ndash;</select>&ndash;&gt;-->
+        <!--&lt;!&ndash;<input type="submit" value="提交" />&ndash;&gt;-->
+        <!--<h1>{{error}}</h1>-->
+    <!--</form>-->

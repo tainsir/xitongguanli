@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--页面标题块-->
+    <title>{% block page_title %}安全生产管理系统 {% endblock %}</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}">
+    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap-theme.css' %}" rel="stylesheet">
+    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap-theme.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet"/>
+    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'bower_components/Ionicons/css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/skins/skin-blue.min.css' %}">
+    <style type="text/css">
+			.col-xs-1 {
+				width: 5%;
+			}
+
+			.col-xs-10 {
+				width: 100%;
+			}
+
+			table th {
+				background: white;
+				text-align: center;
+			}
+
+			table td {
+				text-align: center;
+			}
+
+			table tr:nth-child(even) {
+				background: #ccc;
+			}
+
+			table tr:nth-child(odd) {
+				background: lightblue;
+			}
+
+
+    </style>
+
+    {% block css %} {% endblock %}
+    <!--<link rel="stylesheet"-->
+    <!--href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">-->
+</head>
+
+<!-- 预留的css模块 -->
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <!-- 顶部导航区 -->
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="#" class="logo">
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>安全生产</b>管理系统</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"></a>
+            <!-- Navbar Right Menu -->
+            <!--自定义导航栏-->
+
+            <div class="navbar-custom-menu">
+                {% block navbar-custom-menu %}
+                <ul class="nav navbar-nav">
+                    <!-- Messages: style can be found in dropdown.less-->
+
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- The user image in the navbar-->
+                            <img src="{% static 'img/user2-160x160.jpg' %}" class="user-image" alt="User Image">
+                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                            {% if request.session.login %}
+                            <span class="hidden-xs">{{ request.session.login }}</span>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- The user image in the menu -->
+                            <li class="user-header">
+                                <img src="{% static 'img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                                {% if request.session.login %}
+                                <div>
+                                    <label>  <!--<span>{{request.session.organization}}:</span>--><span>{{request.session.login}}</span></label>
+                                    <br>
+                                    <label><span>您的角色为:</span><span>{{request.session.role}}</span></label>
+
+                                    <p id="time">
+
+                                    </p>
+                                </div>
+                                {% endif %}
+                            </li>
+
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="{% url 'user:choice' %}" class="btn btn-default btn-flat">切换角色</a>
+                                    <a href="{% url 'user:login_out' %}" class="btn btn-default btn-flat">退出</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+                {% endblock %}
+            </div>
+
+        </nav>
+    </header>
+
+    <!-- 左侧导航区 -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="{% static 'img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    {% if request.session.login %}
+                    <p>{{ request.session.login }}</p>
+                    {% endif %}
+                    <!-- Status -->
+                    <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+                </div>
+            </div>
+
+            <!-- 菜单栏搜索 -->
+            <!--<form action="#" method="get" class="sidebar-form">-->
+            <!--<div class="input-group">-->
+            <!--<input type="text" name="q" class="form-control" placeholder="搜索...">-->
+            <!--<span class="input-group-btn">-->
+            <!--<button type="submit" name="search" id="search-btn" class="btn btn-flat"><i-->
+            <!--class="fa fa-search"></i>-->
+            <!--</button>-->
+            <!--</span>-->
+            <!--</div>-->
+            <!--</form>-->
+
+            <!--菜单导航模板-->
+            <ul class="sidebar-menu" data-widget="tree">
+                <!--<li class="header">菜单列表</li>-->
+
+                <!-- 菜单列表 -->
+                <!--遍历权限范围菜单-->
+                {% for menu in menu_list %}
+                <!-- 如果父级菜单为空，说明为一级菜单,-->
+                {% ifequal menu.parent None%}
+                <!-- 一级菜单名称,-->
+                <li class="treeview">
+                    <input type="text" value="{{menu.id}}" name="menuid" style="display:none">
+                    <a href="#" class="one">
+                        <span>{{menu.title}}</span>
+                        <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                    </a>
+                    <!-- 如果二级菜单不为空 -->
+                    <ul class="treeview-menu">
+                        {% if menu.menu_set.all %}
+                        <!-- 循环二级菜单 -->
+                        {% for menu2 in menu.menu_set.all %}
+                        <!--如果循环的二级菜单刚好在权限范围菜单以内-->
+                            {% if menu2 in menu_list %}
+                        <!--如果二级菜单无子菜单，则直接展示可点击的-->
+                            {% ifequal menu2.url "#" %}
+                        <li class="treeview">
+                            <a href="{{menu2.url}}" class="two">
+                                <!-- 二级菜单名称 -->
+                                <span>{{menu2.title }}</span>
+                                <span class="pull-right-container">
+                                                        <i class="fa fa-angle-left pull-right"></i>
+                                                    </span>
+                            </a>
+                            {% else %}
+                        <!--二级菜单依然可展开的形式-->
+                        <li>
+                            <a href="{{menu2.url}}" class="two">{{menu2.title }} </a>
+                            {% endifequal %}
+                            <!-- 如果三级菜单不为空 -->
+                            <!-- 三级菜单名称 -->
+                            <ul class="treeview-menu">
+                                {% if menu2.menu_set.all %}
+                                {% for menu3 in menu2.menu_set.all %}
+                                {% if menu3 in menu_list %}
+                                <li>
+                                    <a href="{{menu3.url}}" class="three">{{menu3.title }} </a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </ul>
+                </li>
+                {% else %}
+                <!--<li>-->
+
+                    <!--<a href="{{menu.url}}" class="one">-->
+                        <!--{{menu.title}}-->
+
+                    <!--</a>-->
+
+                <!--</li>-->
+
+                {% endifequal %} {% empty %} {% endfor %}
+
+            </ul>
+
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <!--标题-->
+            {% block title %} {% endblock %}
+            <div style="margin-left:0px;">
+                {% block checkpower %}
+                <!-------------------如果action为list,展示新建,查询---------------->
+                {% if action == 'table' %}
+                {% for power in request.session.powerdata %}
+                <!--新建-->
+                {% if power.key == '1' %}
+                <!--在各个模块中可由如下模块重写方法-->
+                {% block add %}
+                <a href="{{power.url}}" class="btn btn-success"><span class = "glyphicon glyphicon-plus">{{power.title}}</span></a>
+                {% endblock %}
+                {% endif %}
+                <!--查询-->
+                {% if power.key == '2' %}
+                {% block search %}
+                <a href="{{power.url}}" class="btn btn-default">{{power.title}}</a>
+                {% endblock %}
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                <!-----------------如果action为detail,展示编辑和删除-------------------->
+                {% if action == 'detail' %}
+                {% for power in request.session.powerdata %}
+                <!--编辑-->
+                {% if power.key == '5' %}
+                {% block modify %}
+                <a href="{{power.url}}" class="btn btn-warning">{{power.title}}</a>
+                {% endblock %}
+                {% endif %}
+                <!--删除-->
+                {% if power.key == '3' %}
+                {% block del %}
+                <a href="{{power.url}}" class="btn btn-info">{{power.title}}</a>
+                {% endblock %}
+                {% endif %}
+                {% endfor %}
+
+                {% endif %}
+
+                <!-----------------如果action为table,展示编辑和删除-------------------->
+                <!--table块-->
+                <!--{% if action == 'table' %}-->
+                <!--{% for power in request.session.powerdata %}-->
+                <!--{% if power.key == '4' %}-->
+                <!--&lt;!&ndash;在各个模块中可由如下模块重写方法&ndash;&gt;-->
+                <!--<a href="{{power.url}}" class="btn btn-default"><span class="glyphicon glyphicon-plus"-->
+                <!--style="color: black;"-->
+                <!--aria-hidden="true"></span></a>-->
+                <!--{% endif %}-->
+                <!--{% if power.key == '5' %}-->
+                <!--<a href="{{power.url}}" class="btn btn-default">{{power.title}}</a>-->
+                <!--{% endif %}-->
+                <!--{% if power.key == '6' %}-->
+                <!--<a href="{{power.url}}" class="btn btn-default">{{power.title}}</a>-->
+                <!--{% endif %}-->
+                <!--{% if power.key == '7' %}-->
+                <!--<a href="{{power.url}}" class="btn btn-default">{{power.title}}</a>-->
+                <!--{% endif %}-->
+                <!--{% endfor %}-->
+                <!--{% endif %}-->
+                {% block beiyong %}
+                {% endblock %}
+                {% endblock %}
+
+            </div>
+
+        </section>
+        <div class="col-xs-1">
+        </div>
+        <!-- 内容模块添加 -->
+        <div class="col-xs-10">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+        <div class="col-xs-1">
+        </div>
+        <!-- /.content -->
+    </div>
+
+    <!-- 底部信息区 -->
+    {% block footer %}
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+            Anything you want
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+    </footer>
+    {% endblock %}
+    <!-- 设置区 -->
+    <!---->
+
+    <div class="control-sidebar-bg"></div>
+</div>
+
+</body>
+<!-- jQuery 3 -->
+<script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'jquery-2.1.4/jquery-2.1.4/jquery.js' %}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'bower_components/bootstrap/js/modal.js' %}"></script>
+<script src="{% static 'js/adminlte.min.js' %}"></script>
+
+<!--获取当前年月日-->
+<script type="text/javascript">
+		function date() {
+			var date = new Date();
+			year = date.getFullYear();
+			month = date.getMonth();
+			date = date.getDate();
+			strs = year + "年" + month + "月" + date + "日";
+			document.getElementById("time").innerHTML = strs;
+		}
+		date()
+
+
+</script>
+<!-- 预留的脚本区 -->
+{% block javascript %} {% endblock %}
+
+</html>
